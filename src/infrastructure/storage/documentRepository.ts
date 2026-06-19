@@ -1,16 +1,22 @@
 import type { VitrineDocument } from "@/domain/document"
 import { STORAGE_KEYS } from "./keys"
-import { readJSON, readString, removeKey, writeJSON, writeString } from "./safeStorage"
+import {
+  readCompressedJSON,
+  readString,
+  removeKey,
+  writeCompressedJSON,
+  writeString,
+} from "./safeStorage"
 
 /** Persistence port for documents and the currently open document id. */
 export const documentRepository = {
   loadAll(): VitrineDocument[] {
-    const docs = readJSON<VitrineDocument[]>(STORAGE_KEYS.docs, [])
+    const docs = readCompressedJSON<VitrineDocument[]>(STORAGE_KEYS.docs, [])
     return Array.isArray(docs) ? docs : []
   },
 
   saveAll(docs: VitrineDocument[]): void {
-    writeJSON(STORAGE_KEYS.docs, docs)
+    writeCompressedJSON(STORAGE_KEYS.docs, docs)
   },
 
   loadCurrentId(): string | null {

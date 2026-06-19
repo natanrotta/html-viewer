@@ -5,6 +5,7 @@ import { Box, chakra, Flex } from "@chakra-ui/react"
 import { SquareIconButton } from "@/components/common/SquareIconButton"
 import { FileTextIcon, Maximize2Icon, PanelLeftOpenIcon } from "@/components/icons"
 import type { ViewMode } from "@/domain/view"
+import { MOD_KEY } from "@/lib/platform"
 import { DocumentTitleInput } from "./DocumentTitleInput"
 import { ViewSegmentedControl } from "./ViewSegmentedControl"
 
@@ -17,7 +18,7 @@ interface TopbarProps {
   onToggleFullscreen: () => void
 }
 
-/** Glass top bar: panel toggle · document title · view control · fullscreen. */
+/** Compact glass top bar: panel toggle · title · view control · fullscreen. */
 export function Topbar({
   title,
   onTitleChange,
@@ -29,11 +30,11 @@ export function Topbar({
   return (
     <chakra.header
       flex="none"
-      h="60px"
+      h="50px"
       display="flex"
       alignItems="center"
-      gap="12px"
-      px="16px"
+      gap="10px"
+      px="14px"
       bg="surface.topbar"
       borderBottom="1px solid"
       borderColor="line.subtle"
@@ -43,13 +44,15 @@ export function Topbar({
       <SquareIconButton
         icon={PanelLeftOpenIcon}
         ariaLabel="Painel lateral"
-        title="Mostrar/ocultar painel"
+        tooltip={`Painel lateral · ${MOD_KEY} B`}
         onClick={onToggleSidebar}
+        buttonSize="34px"
+        iconSize={16}
       />
 
-      <Flex flex="1" minW="0" align="center" gap="8px">
+      <Flex flex="1" minW="0" align="center" gap="7px">
         <Box flex="none" display="grid" placeItems="center" color="content.muted">
-          <FileTextIcon size={16} />
+          <FileTextIcon size={15} />
         </Box>
         <DocumentTitleInput value={title} onChange={onTitleChange} />
       </Flex>
@@ -59,8 +62,10 @@ export function Topbar({
       <SquareIconButton
         icon={Maximize2Icon}
         ariaLabel="Tela cheia"
-        title="Tela cheia"
+        tooltip={`Tela cheia · ${MOD_KEY} F`}
         onClick={onToggleFullscreen}
+        buttonSize="34px"
+        iconSize={16}
         lift
       />
     </chakra.header>

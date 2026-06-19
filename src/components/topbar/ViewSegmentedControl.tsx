@@ -42,11 +42,11 @@ function SegmentedTab({ active, label, icon: Icon, onClick }: SegmentedTabProps)
       {...hoverProps}
       display="inline-flex"
       alignItems="center"
-      gap="7px"
-      h="32px"
-      px="13px"
+      gap="6px"
+      h="30px"
+      px="11px"
       border="none"
-      borderRadius="8px"
+      borderRadius="7px"
       cursor="pointer"
       fontFamily="sans"
       bg={active ? "surface.base" : "transparent"}
@@ -55,8 +55,8 @@ function SegmentedTab({ active, label, icon: Icon, onClick }: SegmentedTabProps)
       transition={ease("background, color, box-shadow", "base")}
       _hover={active ? undefined : { color: "content.secondary" }}
     >
-      <Icon ref={ref} size={15} />
-      <chakra.span fontSize="13px" fontWeight="700">
+      <Icon ref={ref} size={14} />
+      <chakra.span fontSize="12.5px" fontWeight="700">
         {label}
       </chakra.span>
     </chakra.button>
@@ -73,10 +73,10 @@ export function ViewSegmentedControl({ view, onChange }: ViewSegmentedControlPro
   return (
     <Flex
       align="center"
-      gap="3px"
+      gap="2px"
       bg="surface.sunken"
       p="3px"
-      borderRadius="11px"
+      borderRadius="10px"
       border="1px solid"
       borderColor="line.subtle"
     >

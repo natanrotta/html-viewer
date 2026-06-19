@@ -44,6 +44,7 @@ export interface UseDocumentsResult extends DocumentsState {
   changeCode: (code: string) => void
   changeTitle: (title: string) => void
   setMode: (mode: EditorMode) => void
+  saveNow: () => void
 }
 
 /**
@@ -138,6 +139,12 @@ export function useDocuments(): UseDocumentsResult {
       rendered: renderDocument(code, snapshot.mode),
     }))
   }, [])
+
+  // Flush the pending autosave and persist the current code immediately.
+  const saveNow = useCallback(() => {
+    clearTimeout(commitTimer.current)
+    commit(stateRef.current.code)
+  }, [commit])
 
   const changeCode = useCallback(
     (code: string) => {
@@ -269,5 +276,6 @@ export function useDocuments(): UseDocumentsResult {
     changeCode,
     changeTitle,
     setMode,
+    saveNow,
   }
 }

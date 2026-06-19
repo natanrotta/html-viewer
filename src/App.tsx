@@ -1,10 +1,13 @@
+import { useEffect, useRef, useState } from "react"
 import { Box } from "@chakra-ui/react"
 
 import { FullscreenOverlay } from "@/components/fullscreen/FullscreenOverlay"
 import { Sidebar } from "@/components/sidebar/Sidebar"
 import { MainArea } from "@/components/workspace/MainArea"
+import { cycleView } from "@/domain/view"
 import { useDocuments } from "@/hooks/useDocuments"
 import { useFullscreen } from "@/hooks/useFullscreen"
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts"
 import { useSidebar } from "@/hooks/useSidebar"
 import { useThemeMode } from "@/hooks/useThemeMode"
 import { useViewMode } from "@/hooks/useViewMode"
@@ -16,8 +19,9 @@ const CANVAS_GLOW =
   `radial-gradient(1000px 500px at -10% -10%, color-mix(in srgb, #2f80ed 7%, transparent), transparent 55%)`
 
 /**
- * Composition root: wires the application hooks to the studio layout.
- * The root grid's first track collapses to animate the sidebar open/closed.
+ * Composition root: wires the application hooks to the studio layout and binds
+ * the global keyboard shortcuts. The root grid's first track collapses to
+ * animate the sidebar open/closed.
  */
 export default function App() {
   const documents = useDocuments()
@@ -25,6 +29,27 @@ export default function App() {
   const sidebar = useSidebar()
   const fullscreen = useFullscreen()
   const theme = useThemeMode()
+
+  const [justSaved, setJustSaved] = useState(false)
+  const savedTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+
+  const handleSave = () => {
+    documents.saveNow()
+    setJustSaved(true)
+    clearTimeout(savedTimer.current)
+    savedTimer.current = setTimeout(() => setJustSaved(false), 1400)
+  }
+
+  useEffect(() => () => clearTimeout(savedTimer.current), [])
+
+  useKeyboardShortcuts({
+    toggleSidebar: sidebar.toggle,
+    save: handleSave,
+    newDocument: documents.newDocument,
+    prevView: () => setView(cycleView(view, -1)),
+    nextView: () => setView(cycleView(view, 1)),
+    toggleFullscreen: fullscreen.toggle,
+  })
 
   return (
     <Box
@@ -44,6 +69,7 @@ export default function App() {
         docs={documents.docs}
         currentId={documents.currentId}
         isDark={theme.isDark}
+        justSaved={justSaved}
         onNewDocument={documents.newDocument}
         onSelectDocument={documents.selectDocument}
         onDeleteDocument={documents.deleteDocument}

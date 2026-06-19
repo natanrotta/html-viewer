@@ -16,6 +16,9 @@ Construído a partir do handoff de design **Cuidda** (base Chakra UI): azul de m
 - **Tema claro/escuro** (persistido, sem flash na carga).
 - **Sidebar recolhível** e **tela cheia** do resultado (sai com `Esc`).
 - **Autosave** com debounce e título derivado de `<title>`/`<h1>`.
+- **Divisória redimensionável** no modo Dividir (arraste · duplo-clique iguala).
+- **Atalhos de teclado** com popover de referência no rodapé da sidebar.
+- **Persistência comprimida** (lz-string) para ocupar menos espaço no navegador.
 - **Ícones animados** (hover) do [lucide-animated.com](https://lucide-animated.com) via Motion.
 
 ## Stack
@@ -33,6 +36,18 @@ yarn build      # build de produção (tsc -b && vite build)
 yarn preview    # pré-visualiza o build
 yarn typecheck  # checagem de tipos
 ```
+
+## Atalhos
+
+Funcionam com **Ctrl** (Windows/Linux) ou **⌘** (macOS):
+
+| Atalho      | Ação                                            |
+| ----------- | ----------------------------------------------- |
+| `B`         | Abrir/fechar painel lateral                     |
+| `S`         | Salvar documento                                |
+| `N`         | Novo documento                                  |
+| `←` / `→`   | Alternar visão (código · dividir · visualizar)  |
+| `F`         | Tela cheia                                       |
 
 ## Arquitetura
 
@@ -61,10 +76,11 @@ ficam nos hooks/domínio. A persistência é isolada atrás de repositórios.
 
 | Chave             | Conteúdo                                              |
 | ----------------- | ----------------------------------------------------- |
-| `vitrine:docs`    | documentos recentes (máx. 40)                         |
+| `vitrine:docs`    | documentos recentes (máx. 40) — comprimidos (lz-string) |
 | `vitrine:current` | id do documento aberto                                |
 | `vitrine:view`    | modo de visão (`code` \| `split` \| `preview`)        |
 | `vitrine:sidebar` | sidebar aberta (`1`) ou recolhida (`0`)               |
+| `vitrine:split`   | largura do editor no modo dividir (%)                 |
 | `vitrine:theme`   | tema (`light` \| `dark`) — gerido pelo next-themes    |
 
 ## Alias de importação

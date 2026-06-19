@@ -1,8 +1,10 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { chakra } from "@chakra-ui/react"
 
 import { useIconHover, type AnimatedIcon } from "@/components/icons"
+import { Tooltip } from "@/components/ui/tooltip"
 import { ease } from "@/theme/motion"
 
 interface SquareIconButtonProps {
@@ -10,6 +12,7 @@ interface SquareIconButtonProps {
   ariaLabel: string
   onClick?: () => void
   title?: string
+  tooltip?: ReactNode
   /** Button dimension (square), e.g. "38px". */
   buttonSize?: string
   iconSize?: number
@@ -24,13 +27,14 @@ interface SquareIconButtonProps {
 /**
  * Square, bordered icon button with a brand-coloured hover state and an
  * animated Lucide glyph that plays while the whole button is hovered.
- * Shared by the sidebar toggle, fullscreen toggle and theme toggle.
+ * Optionally wrapped in a tooltip.
  */
 export function SquareIconButton({
   icon: Icon,
   ariaLabel,
   onClick,
   title,
+  tooltip,
   buttonSize = "38px",
   iconSize = 17,
   radius = "md",
@@ -39,11 +43,11 @@ export function SquareIconButton({
 }: SquareIconButtonProps) {
   const { ref, hoverProps } = useIconHover()
 
-  return (
+  const button = (
     <chakra.button
       type="button"
       aria-label={ariaLabel}
-      title={title}
+      title={tooltip ? undefined : title}
       onClick={onClick}
       {...hoverProps}
       flex="none"
@@ -65,5 +69,13 @@ export function SquareIconButton({
     >
       <Icon ref={ref} size={iconSize} />
     </chakra.button>
+  )
+
+  if (!tooltip) return button
+
+  return (
+    <Tooltip content={tooltip} showArrow>
+      {button}
+    </Tooltip>
   )
 }

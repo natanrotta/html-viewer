@@ -8,4 +8,5 @@ export const STORAGE_KEYS = {
   current: "vitrine:current",
   view: "vitrine:view",
   sidebar: "vitrine:sidebar",
+  split: "vitrine:split",
 } as const

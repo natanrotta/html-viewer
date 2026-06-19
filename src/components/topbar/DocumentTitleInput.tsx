@@ -25,7 +25,7 @@ export function DocumentTitleInput({ value, onChange }: DocumentTitleInputProps)
       bg="transparent"
       fontFamily="sans"
       fontWeight="800"
-      fontSize="16px"
+      fontSize="15px"
       letterSpacing="-0.01em"
       color="content.primary"
       p="6px 8px"

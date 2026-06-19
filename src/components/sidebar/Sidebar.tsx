@@ -13,6 +13,7 @@ interface SidebarProps {
   docs: VitrineDocument[]
   currentId: string | null
   isDark: boolean
+  justSaved: boolean
   onNewDocument: () => void
   onSelectDocument: (id: string) => void
   onDeleteDocument: (id: string) => void
@@ -28,6 +29,7 @@ export function Sidebar({
   docs,
   currentId,
   isDark,
+  justSaved,
   onNewDocument,
   onSelectDocument,
   onDeleteDocument,
@@ -70,7 +72,7 @@ export function Sidebar({
           )}
         </Box>
 
-        <SidebarFooter isDark={isDark} onToggleTheme={onToggleTheme} />
+        <SidebarFooter isDark={isDark} justSaved={justSaved} onToggleTheme={onToggleTheme} />
       </Flex>
     </Box>
   )

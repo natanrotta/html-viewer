@@ -22,4 +22,15 @@ export const preferenceRepository = {
   saveSidebarOpen(open: boolean): void {
     writeString(STORAGE_KEYS.sidebar, open ? "1" : "0")
   },
+
+  /** Editor width in the split view, as a percentage (clamped 18-82). */
+  loadSplit(fallback = 50): number {
+    const value = readString(STORAGE_KEYS.split)
+    const ratio = value == null ? NaN : Number(value)
+    return Number.isFinite(ratio) ? Math.min(82, Math.max(18, ratio)) : fallback
+  },
+
+  saveSplit(ratio: number): void {
+    writeString(STORAGE_KEYS.split, String(Math.round(ratio)))
+  },
 }
