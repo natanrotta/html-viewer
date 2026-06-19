@@ -16,11 +16,13 @@ interface Tab {
   value: ViewMode
   label: string
   icon: AnimatedIcon
+  /** Hidden on mobile (split has no room for side-by-side). */
+  desktopOnly?: boolean
 }
 
 const TABS: Tab[] = [
   { value: "code", label: "Código", icon: CodeIcon },
-  { value: "split", label: "Dividir", icon: Columns2Icon },
+  { value: "split", label: "Dividir", icon: Columns2Icon, desktopOnly: true },
   { value: "preview", label: "Visualizar", icon: EyeIcon },
 ]
 
@@ -28,10 +30,11 @@ interface SegmentedTabProps {
   active: boolean
   label: string
   icon: AnimatedIcon
+  desktopOnly?: boolean
   onClick: () => void
 }
 
-function SegmentedTab({ active, label, icon: Icon, onClick }: SegmentedTabProps) {
+function SegmentedTab({ active, label, icon: Icon, desktopOnly, onClick }: SegmentedTabProps) {
   const { ref, hoverProps } = useIconHover()
 
   return (
@@ -39,8 +42,9 @@ function SegmentedTab({ active, label, icon: Icon, onClick }: SegmentedTabProps)
       type="button"
       onClick={onClick}
       title={label}
+      aria-label={label}
       {...hoverProps}
-      display="inline-flex"
+      display={desktopOnly ? { base: "none", md: "inline-flex" } : "inline-flex"}
       alignItems="center"
       gap="6px"
       h="30px"
@@ -56,7 +60,7 @@ function SegmentedTab({ active, label, icon: Icon, onClick }: SegmentedTabProps)
       _hover={active ? undefined : { color: "content.secondary" }}
     >
       <Icon ref={ref} size={14} />
-      <chakra.span fontSize="12.5px" fontWeight="700">
+      <chakra.span display={{ base: "none", md: "inline" }} fontSize="12.5px" fontWeight="700">
         {label}
       </chakra.span>
     </chakra.button>
@@ -68,7 +72,10 @@ interface ViewSegmentedControlProps {
   onChange: (view: ViewMode) => void
 }
 
-/** Segmented control switching between code · split · preview layouts. */
+/**
+ * Segmented control: code · split · preview. On mobile the split tab is hidden
+ * and the tabs collapse to icon-only.
+ */
 export function ViewSegmentedControl({ view, onChange }: ViewSegmentedControlProps) {
   return (
     <Flex
@@ -86,6 +93,7 @@ export function ViewSegmentedControl({ view, onChange }: ViewSegmentedControlPro
           active={view === tab.value}
           label={tab.label}
           icon={tab.icon}
+          desktopOnly={tab.desktopOnly}
           onClick={() => onChange(tab.value)}
         />
       ))}

@@ -18,8 +18,8 @@ export function DocumentTitleInput({ value, onChange }: DocumentTitleInputProps)
       placeholder="Sem título"
       spellCheck={false}
       minW="0"
-      maxW="340px"
-      flex="0 1 auto"
+      maxW={{ base: "none", md: "340px" }}
+      flex={{ base: "1 1 auto", md: "0 1 auto" }}
       border="none"
       outline="none"
       bg="transparent"

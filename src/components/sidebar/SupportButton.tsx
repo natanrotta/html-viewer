@@ -29,7 +29,7 @@ export function SupportButton() {
   const { ref, hoverProps } = useIconHover()
 
   return (
-    <Dialog.Root placement="center" size="sm" motionPreset="slide-in-bottom">
+    <Dialog.Root placement="center" size={{ base: "xs", sm: "sm" }} motionPreset="slide-in-bottom">
       <Box px="12px" pb="10px">
         <Dialog.Trigger asChild>
           <chakra.button

@@ -13,6 +13,7 @@ import { SidebarFooter } from "./SidebarFooter"
 import { SupportButton } from "./SupportButton"
 
 interface SidebarProps {
+  open: boolean
   docs: VitrineDocument[]
   currentId: string | null
   isDark: boolean
@@ -29,11 +30,12 @@ type Confirmation =
   | { kind: "clear"; count: number }
 
 /**
- * Recents panel. The outer `<aside>` clips to the collapsing grid column while
- * the inner column keeps its fixed 284px width, so collapse animates cleanly.
- * Destructive actions route through a confirmation dialog.
+ * Recents panel. On desktop it's a grid column that collapses to 0 (the inner
+ * fixed-width column is clipped). On mobile it's a fixed off-canvas drawer that
+ * slides in with `open`. Destructive actions route through a confirm dialog.
  */
 export function Sidebar({
+  open,
   docs,
   currentId,
   isDark,
@@ -83,10 +85,24 @@ export function Sidebar({
         : { title: "", description: "", confirmLabel: "Excluir" }
 
   return (
-    <Box as="aside" overflow="hidden" minW="0" h="100%">
+    <Box
+      as="aside"
+      position={{ base: "fixed", md: "relative" }}
+      top={{ base: 0, md: "auto" }}
+      left={{ base: 0, md: "auto" }}
+      bottom={{ base: 0, md: "auto" }}
+      zIndex={{ base: 50, md: "auto" }}
+      w={{ base: "min(86vw, 320px)", md: "100%" }}
+      h="100%"
+      minW="0"
+      overflow="hidden"
+      transform={{ base: open ? "translateX(0)" : "translateX(-100%)", md: "none" }}
+      transition={ease("transform", "base")}
+      boxShadow={{ base: open ? "panel" : "none", md: "none" }}
+    >
       <Flex
         direction="column"
-        w="284px"
+        w={{ base: "100%", md: "284px" }}
         h="100%"
         bg="surface.base"
         borderRight="1px solid"
