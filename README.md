@@ -1,4 +1,4 @@
-# vitrine — Visualizador de HTML & Markdown
+# HTML Viewer — Visualizador de HTML & Markdown
 
 App de página única para **colar HTML (ou Markdown) e ver o resultado renderizado em
 tempo real**. Editor + pré-visualização ao vivo, biblioteca de documentos recentes
@@ -19,6 +19,9 @@ Construído a partir do handoff de design **Cuidda** (base Chakra UI): azul de m
 - **Divisória redimensionável** no modo Dividir (arraste · duplo-clique iguala).
 - **Atalhos de teclado** com popover de referência no rodapé da sidebar.
 - **Persistência comprimida** (lz-string) para ocupar menos espaço no navegador.
+- **Visão automática** — abrir um documento salta para Visualizar; criar um novo entra em Código.
+- **Confirmação** antes de excluir um documento ou apagar todos.
+- **Apoie o projeto** — botão no sidebar abre um modal com o [Buy Me a Coffee](https://www.buymeacoffee.com/natanrotta).
 - **Ícones animados** (hover) do [lucide-animated.com](https://lucide-animated.com) via Motion.
 
 ## Stack
@@ -41,13 +44,14 @@ yarn typecheck  # checagem de tipos
 
 Funcionam com **Ctrl** (Windows/Linux) ou **⌘** (macOS):
 
-| Atalho      | Ação                                            |
-| ----------- | ----------------------------------------------- |
-| `B`         | Abrir/fechar painel lateral                     |
-| `S`         | Salvar documento                                |
-| `N`         | Novo documento                                  |
-| `←` / `→`   | Alternar visão (código · dividir · visualizar)  |
-| `F`         | Tela cheia                                       |
+| Atalho        | Ação                                            |
+| ------------- | ----------------------------------------------- |
+| `B`           | Abrir/fechar painel lateral                     |
+| `Alt + N`     | Novo documento                                  |
+| `S`           | Salvar documento                                |
+| `←` / `→`     | Alternar visão (código · dividir · visualizar)  |
+| `Shift + L`   | Alternar tema claro/escuro                      |
+| `F`           | Tela cheia                                       |
 
 ## Arquitetura
 

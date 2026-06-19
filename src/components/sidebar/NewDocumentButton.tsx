@@ -4,7 +4,7 @@ import { chakra } from "@chakra-ui/react"
 
 import { PlusIcon, useIconHover } from "@/components/icons"
 import { Tooltip } from "@/components/ui/tooltip"
-import { MOD_KEY } from "@/lib/platform"
+import { ALT_KEY, MOD_KEY } from "@/lib/platform"
 import { ease } from "@/theme/motion"
 
 interface NewDocumentButtonProps {
@@ -16,7 +16,7 @@ export function NewDocumentButton({ onClick }: NewDocumentButtonProps) {
   const { ref, hoverProps } = useIconHover()
 
   return (
-    <Tooltip content={`Novo documento · ${MOD_KEY} N`} showArrow>
+    <Tooltip content={`Novo documento · ${MOD_KEY} ${ALT_KEY} N`} showArrow>
       <chakra.button
         type="button"
         onClick={onClick}

@@ -20,8 +20,8 @@ const CANVAS_GLOW =
 
 /**
  * Composition root: wires the application hooks to the studio layout and binds
- * the global keyboard shortcuts. The root grid's first track collapses to
- * animate the sidebar open/closed.
+ * the global keyboard shortcuts. Opening a saved document jumps to preview;
+ * starting a new one drops into the code editor.
  */
 export default function App() {
   const documents = useDocuments()
@@ -42,10 +42,21 @@ export default function App() {
 
   useEffect(() => () => clearTimeout(savedTimer.current), [])
 
+  const openDocument = (id: string) => {
+    documents.selectDocument(id)
+    setView("preview")
+  }
+
+  const createDocument = () => {
+    documents.newDocument()
+    setView("code")
+  }
+
   useKeyboardShortcuts({
     toggleSidebar: sidebar.toggle,
     save: handleSave,
-    newDocument: documents.newDocument,
+    newDocument: createDocument,
+    toggleTheme: theme.toggle,
     prevView: () => setView(cycleView(view, -1)),
     nextView: () => setView(cycleView(view, 1)),
     toggleFullscreen: fullscreen.toggle,
@@ -70,8 +81,8 @@ export default function App() {
         currentId={documents.currentId}
         isDark={theme.isDark}
         justSaved={justSaved}
-        onNewDocument={documents.newDocument}
-        onSelectDocument={documents.selectDocument}
+        onNewDocument={createDocument}
+        onSelectDocument={openDocument}
         onDeleteDocument={documents.deleteDocument}
         onClearAll={documents.clearAll}
         onToggleTheme={theme.toggle}

@@ -248,12 +248,6 @@ export function useDocuments(): UseDocumentsResult {
     const snapshot = stateRef.current
     if (!snapshot.docs.length) return
 
-    const confirmed =
-      typeof window === "undefined" ||
-      !window.confirm ||
-      window.confirm("Apagar todos os documentos salvos? Esta ação não pode ser desfeita.")
-    if (!confirmed) return
-
     documentRepository.clear()
     clearTimeout(commitTimer.current)
     setState((prev) => ({

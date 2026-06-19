@@ -14,7 +14,7 @@ export function BrandMark() {
           letterSpacing="-0.02em"
           color="content.primary"
         >
-          vitrine
+          HTML Viewer
         </Text>
         <Text fontSize="11px" fontWeight="600" color="content.muted">
           HTML &amp; Markdown

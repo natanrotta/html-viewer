@@ -4,6 +4,7 @@ import { chakra, Flex, Text } from "@chakra-ui/react"
 
 import { MoonIcon, SunIcon, useIconHover, type AnimatedIcon } from "@/components/icons"
 import { Tooltip } from "@/components/ui/tooltip"
+import { MOD_KEY, SHIFT_KEY } from "@/lib/platform"
 import { ease } from "@/theme/motion"
 import { ShortcutsPopover } from "./ShortcutsPopover"
 
@@ -39,7 +40,10 @@ export function SidebarFooter({ isDark, justSaved, onToggleTheme }: SidebarFoote
       <Flex flex="none" align="center" gap="8px">
         <ShortcutsPopover />
 
-        <Tooltip content={isDark ? "Tema claro" : "Tema escuro"} showArrow>
+        <Tooltip
+          content={`${isDark ? "Tema claro" : "Tema escuro"} · ${MOD_KEY} ${SHIFT_KEY} L`}
+          showArrow
+        >
           <chakra.button
             type="button"
             aria-label="Alternar tema"

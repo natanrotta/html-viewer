@@ -3,7 +3,7 @@
 import { chakra, Flex, Kbd, Popover, Portal, Text } from "@chakra-ui/react"
 
 import { KeyboardIcon, useIconHover } from "@/components/icons"
-import { MOD_KEY } from "@/lib/platform"
+import { ALT_KEY, MOD_KEY, SHIFT_KEY } from "@/lib/platform"
 import { ease } from "@/theme/motion"
 
 interface Shortcut {
@@ -13,9 +13,10 @@ interface Shortcut {
 
 const SHORTCUTS: Shortcut[] = [
   { label: "Abrir/fechar painel", keys: [MOD_KEY, "B"] },
+  { label: "Novo documento", keys: [MOD_KEY, ALT_KEY, "N"] },
   { label: "Salvar documento", keys: [MOD_KEY, "S"] },
-  { label: "Novo documento", keys: [MOD_KEY, "N"] },
   { label: "Alternar visão", keys: [MOD_KEY, "←", "→"] },
+  { label: "Tema claro/escuro", keys: [MOD_KEY, SHIFT_KEY, "L"] },
   { label: "Tela cheia", keys: [MOD_KEY, "F"] },
 ]
 

@@ -1,33 +1,39 @@
 "use client";
 
-import type { Transition, Variants } from "motion/react";
+import type { Variants } from "motion/react";
 import { motion, useAnimation } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
-export interface DeleteIconHandle {
+export interface CoffeeIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }
 
-interface DeleteIconProps extends HTMLAttributes<HTMLDivElement> {
+interface CoffeeIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-const LID_VARIANTS: Variants = {
-  normal: { y: 0 },
-  animate: { y: -1.1 },
+const PATH_VARIANTS: Variants = {
+  normal: {
+    y: 0,
+    opacity: 1,
+  },
+  animate: (custom: number) => ({
+    y: -3,
+    opacity: [0, 1, 0],
+    transition: {
+      repeat: Number.POSITIVE_INFINITY,
+      duration: 1.5,
+      ease: "easeInOut",
+      delay: 0.2 * custom,
+    },
+  }),
 };
 
-const SPRING_TRANSITION: Transition = {
-  type: "spring",
-  stiffness: 500,
-  damping: 30,
-};
-
-const DeleteIcon = forwardRef<DeleteIconHandle, DeleteIconProps>(
+const CoffeeIcon = forwardRef<CoffeeIconHandle, CoffeeIconProps>(
   ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
     const controls = useAnimation();
     const isControlledRef = useRef(false);
@@ -77,27 +83,36 @@ const DeleteIcon = forwardRef<DeleteIconHandle, DeleteIconProps>(
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
+          style={{ overflow: "visible" }}
           viewBox="0 0 24 24"
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <motion.g
+          <motion.path
             animate={controls}
-            transition={SPRING_TRANSITION}
-            variants={LID_VARIANTS}
-          >
-            <path d="M3 6h18" />
-            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-          </motion.g>
-          <path d="M19 8v12c0 1-1 2-2 2H7c-1 0-2-1-2-2V8" />
-          <line x1="10" x2="10" y1="11" y2="17" />
-          <line x1="14" x2="14" y1="11" y2="17" />
+            custom={0.2}
+            d="M10 2v2"
+            variants={PATH_VARIANTS}
+          />
+          <motion.path
+            animate={controls}
+            custom={0.4}
+            d="M14 2v2"
+            variants={PATH_VARIANTS}
+          />
+          <motion.path
+            animate={controls}
+            custom={0}
+            d="M6 2v2"
+            variants={PATH_VARIANTS}
+          />
+          <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" />
         </svg>
       </div>
     );
   }
 );
 
-DeleteIcon.displayName = "DeleteIcon";
+CoffeeIcon.displayName = "CoffeeIcon";
 
-export { DeleteIcon };
+export { CoffeeIcon };

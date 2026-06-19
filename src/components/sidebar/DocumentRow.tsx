@@ -1,6 +1,5 @@
 "use client"
 
-import type { KeyboardEvent, MouseEvent } from "react"
 import { Box, chakra, Flex, Text } from "@chakra-ui/react"
 
 import { DeleteIcon, FileTextIcon, useIconHover } from "@/components/icons"
@@ -15,77 +14,81 @@ interface DocumentRowProps {
   onDelete: (id: string) => void
 }
 
-/** A single recents entry — file tile, title, relative time, delete action. */
+/**
+ * A recents entry as two sibling buttons inside a presentational row: an
+ * "open" button (file tile + title + time) and a separate delete button — no
+ * nested interactives, so it stays accessible.
+ */
 export function DocumentRow({ doc, active, onSelect, onDelete }: DocumentRowProps) {
   const file = useIconHover()
   const remove = useIconHover()
 
-  const select = () => onSelect(doc.id)
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault()
-      select()
-    }
-  }
-  const deleteRow = (event: MouseEvent) => {
-    event.stopPropagation()
-    onDelete(doc.id)
-  }
-
   return (
     <Flex
-      role="button"
-      tabIndex={0}
-      onClick={select}
-      onKeyDown={onKeyDown}
       {...file.hoverProps}
       align="center"
-      gap="11px"
-      p="9px 10px"
+      gap="2px"
+      pr="6px"
       borderRadius="11px"
-      cursor="pointer"
       animation="vtRise 200ms cubic-bezier(0.22, 1, 0.36, 1)"
       bg={active ? accentMix("11%") : "transparent"}
       border="1px solid"
       borderColor={active ? accentMix("38%") : "transparent"}
       transition={ease("background, transform, border-color", "base")}
       _hover={active ? undefined : { bg: "surface.hover", transform: "translateX(2px)" }}
-      _focusVisible={{ outline: "2px solid", outlineColor: "line.brand", outlineOffset: "1px" }}
     >
-      <Box
-        flex="none"
-        w="30px"
-        h="30px"
-        display="grid"
-        placeItems="center"
-        borderRadius="8px"
-        bg={active ? ACCENT_APP : "surface.sunken"}
-        color={active ? "white" : "content.muted"}
-        transition={ease("background, color", "base")}
+      <chakra.button
+        type="button"
+        onClick={() => onSelect(doc.id)}
+        flex="1"
+        minW="0"
+        display="flex"
+        alignItems="center"
+        gap="11px"
+        p="9px 6px 9px 10px"
+        border="none"
+        bg="transparent"
+        cursor="pointer"
+        textAlign="left"
+        fontFamily="sans"
+        borderRadius="10px"
+        _focusVisible={{ outline: "2px solid", outlineColor: "line.brand", outlineOffset: "-2px" }}
       >
-        <FileTextIcon ref={file.ref} size={15} />
-      </Box>
-
-      <Box flex="1" minW="0">
-        <Text
-          fontSize="13.5px"
-          fontWeight="700"
-          whiteSpace="nowrap"
-          overflow="hidden"
-          textOverflow="ellipsis"
-          color="content.primary"
+        <Box
+          flex="none"
+          w="30px"
+          h="30px"
+          display="grid"
+          placeItems="center"
+          borderRadius="8px"
+          bg={active ? ACCENT_APP : "surface.sunken"}
+          color={active ? "white" : "content.muted"}
+          transition={ease("background, color", "base")}
         >
-          {doc.title || UNTITLED}
-        </Text>
-        <Text fontSize="11px" fontWeight="600" color="content.muted" mt="1px">
-          {formatRelativeTime(doc.updatedAt)}
-        </Text>
-      </Box>
+          <FileTextIcon ref={file.ref} size={15} />
+        </Box>
+
+        <Box flex="1" minW="0">
+          <Text
+            fontSize="13.5px"
+            fontWeight="700"
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            color="content.primary"
+          >
+            {doc.title || UNTITLED}
+          </Text>
+          <Text fontSize="11px" fontWeight="600" color="content.muted" mt="1px">
+            {formatRelativeTime(doc.updatedAt)}
+          </Text>
+        </Box>
+      </chakra.button>
 
       <chakra.button
         type="button"
-        aria-label="Excluir"
-        onClick={deleteRow}
+        aria-label="Excluir documento"
+        onClick={() => onDelete(doc.id)}
         {...remove.hoverProps}
         flex="none"
         w="26px"
