@@ -133,6 +133,9 @@ const config = defineConfig({
           accentSubtle: {
             value: { base: "#f0fdf9", _dark: "rgba(50, 200, 159, 0.14)" },
           },
+          overlay: {
+            value: { base: "rgba(15, 23, 42, 0.45)", _dark: "rgba(0, 0, 0, 0.6)" },
+          },
         },
         // ---- Content (text) ----
         content: {

@@ -1,6 +1,6 @@
 "use client"
 
-import { chakra, Flex, Text } from "@chakra-ui/react"
+import { Box, chakra, Flex, Text } from "@chakra-ui/react"
 
 import { MoonIcon, SunIcon, useIconHover, type AnimatedIcon } from "@/components/icons"
 import { Tooltip } from "@/components/ui/tooltip"
@@ -38,7 +38,9 @@ export function SidebarFooter({ isDark, justSaved, onToggleTheme }: SidebarFoote
       </Text>
 
       <Flex flex="none" align="center" gap="8px">
-        <ShortcutsPopover />
+        <Box display={{ base: "none", md: "block" }}>
+          <ShortcutsPopover />
+        </Box>
 
         <Tooltip
           content={`${isDark ? "Tema claro" : "Tema escuro"} · ${MOD_KEY} ${SHIFT_KEY} L`}

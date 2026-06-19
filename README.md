@@ -15,6 +15,7 @@ Construído a partir do handoff de design **Cuidda** (base Chakra UI): azul de m
 - **3 modos de visão**: Código · Dividir · Visualizar (persistido).
 - **Tema claro/escuro** (persistido, sem flash na carga).
 - **Sidebar recolhível** e **tela cheia** do resultado (sai com `Esc`).
+- **Responsivo** — no mobile a sidebar vira um drawer e os painéis alternam em tela cheia.
 - **Autosave** com debounce e título derivado de `<title>`/`<h1>`.
 - **Divisória redimensionável** no modo Dividir (arraste · duplo-clique iguala).
 - **Atalhos de teclado** com popover de referência no rodapé da sidebar.

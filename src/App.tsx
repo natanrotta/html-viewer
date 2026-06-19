@@ -7,6 +7,7 @@ import { MainArea } from "@/components/workspace/MainArea"
 import { cycleView } from "@/domain/view"
 import { useDocuments } from "@/hooks/useDocuments"
 import { useFullscreen } from "@/hooks/useFullscreen"
+import { useIsMobile } from "@/hooks/useIsMobile"
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts"
 import { useSidebar } from "@/hooks/useSidebar"
 import { useThemeMode } from "@/hooks/useThemeMode"
@@ -19,9 +20,9 @@ const CANVAS_GLOW =
   `radial-gradient(1000px 500px at -10% -10%, color-mix(in srgb, #2f80ed 7%, transparent), transparent 55%)`
 
 /**
- * Composition root: wires the application hooks to the studio layout and binds
- * the global keyboard shortcuts. Opening a saved document jumps to preview;
- * starting a new one drops into the code editor.
+ * Composition root. On desktop the sidebar is a collapsible grid column; on
+ * mobile (< md) it becomes an off-canvas drawer over a single-column layout,
+ * and "split" view collapses to a single pane.
  */
 export default function App() {
   const documents = useDocuments()
@@ -29,6 +30,7 @@ export default function App() {
   const sidebar = useSidebar()
   const fullscreen = useFullscreen()
   const theme = useThemeMode()
+  const isMobile = useIsMobile()
 
   const [justSaved, setJustSaved] = useState(false)
   const savedTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -42,14 +44,21 @@ export default function App() {
 
   useEffect(() => () => clearTimeout(savedTimer.current), [])
 
+  // No room for side-by-side editing on small screens.
+  useEffect(() => {
+    if (isMobile && view === "split") setView("preview")
+  }, [isMobile, view, setView])
+
   const openDocument = (id: string) => {
     documents.selectDocument(id)
     setView("preview")
+    if (isMobile) sidebar.close()
   }
 
   const createDocument = () => {
     documents.newDocument()
     setView("code")
+    if (isMobile) sidebar.close()
   }
 
   useKeyboardShortcuts({
@@ -67,7 +76,10 @@ export default function App() {
       display="grid"
       h="100vh"
       w="100%"
-      gridTemplateColumns={sidebar.open ? "284px minmax(0, 1fr)" : "0px minmax(0, 1fr)"}
+      gridTemplateColumns={{
+        base: "minmax(0, 1fr)",
+        md: sidebar.open ? "284px minmax(0, 1fr)" : "0px minmax(0, 1fr)",
+      }}
       gridTemplateRows="100vh"
       overflow="hidden"
       fontFamily="sans"
@@ -77,6 +89,7 @@ export default function App() {
       transition={ease("grid-template-columns, background-color", "slow")}
     >
       <Sidebar
+        open={sidebar.open}
         docs={documents.docs}
         currentId={documents.currentId}
         isDark={theme.isDark}
@@ -86,6 +99,17 @@ export default function App() {
         onDeleteDocument={documents.deleteDocument}
         onClearAll={documents.clearAll}
         onToggleTheme={theme.toggle}
+      />
+
+      {/* Mobile drawer backdrop */}
+      <Box
+        display={{ base: sidebar.open ? "block" : "none", md: "none" }}
+        position="fixed"
+        inset="0"
+        zIndex="40"
+        bg="surface.overlay"
+        onClick={sidebar.close}
+        aria-hidden="true"
       />
 
       <MainArea

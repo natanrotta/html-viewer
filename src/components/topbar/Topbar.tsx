@@ -51,7 +51,7 @@ export function Topbar({
       />
 
       <Flex flex="1" minW="0" align="center" gap="7px">
-        <Box flex="none" display="grid" placeItems="center" color="content.muted">
+        <Box flex="none" display={{ base: "none", sm: "grid" }} placeItems="center" color="content.muted">
           <FileTextIcon size={15} />
         </Box>
         <DocumentTitleInput value={title} onChange={onTitleChange} />
@@ -59,15 +59,17 @@ export function Topbar({
 
       <ViewSegmentedControl view={view} onChange={onViewChange} />
 
-      <SquareIconButton
-        icon={Maximize2Icon}
-        ariaLabel="Tela cheia"
-        tooltip={`Tela cheia · ${MOD_KEY} F`}
-        onClick={onToggleFullscreen}
-        buttonSize="34px"
-        iconSize={16}
-        lift
-      />
+      <Box display={{ base: "none", md: "block" }}>
+        <SquareIconButton
+          icon={Maximize2Icon}
+          ariaLabel="Tela cheia"
+          tooltip={`Tela cheia · ${MOD_KEY} F`}
+          onClick={onToggleFullscreen}
+          buttonSize="34px"
+          iconSize={16}
+          lift
+        />
+      </Box>
     </chakra.header>
   )
 }

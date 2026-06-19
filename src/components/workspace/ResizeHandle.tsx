@@ -52,7 +52,7 @@ export function ResizeHandle({ ratio, active, onDragStart, onReset, onNudge }: R
       flex="none"
       w="11px"
       position="relative"
-      display="grid"
+      display={{ base: "none", md: "grid" }}
       placeItems="center"
       cursor="col-resize"
       css={{ touchAction: "none" }}
