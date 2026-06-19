@@ -1,48 +1,72 @@
-# html-viewer
+# vitrine — Visualizador de HTML & Markdown
 
-Projeto React criado do zero com **Vite**, **TypeScript** e **[Chakra UI v3](https://chakra-ui.com/)**.
+App de página única para **colar HTML (ou Markdown) e ver o resultado renderizado em
+tempo real**. Editor + pré-visualização ao vivo, biblioteca de documentos recentes
+salva no navegador, tema claro/escuro e modo tela cheia.
 
-## Requisitos
+Construído a partir do handoff de design **Cuidda** (base Chakra UI): azul de marca
+`#2f80ed`, verde/teal de apoio `#1eb28a`, tipografia Nunito Sans / JetBrains Mono.
 
-- Node.js 20+ (testado com Node 22)
-- npm 10+
+## Funcionalidades
+
+- **Render ao vivo** de HTML (cru) ou **Markdown** (via `marked`) num `<iframe>` isolado.
+- **Alternância HTML ⇄ Markdown** por documento.
+- **Recentes** persistidos em `localStorage` — abrir, excluir e **limpar tudo**.
+- **3 modos de visão**: Código · Dividir · Visualizar (persistido).
+- **Tema claro/escuro** (persistido, sem flash na carga).
+- **Sidebar recolhível** e **tela cheia** do resultado (sai com `Esc`).
+- **Autosave** com debounce e título derivado de `<title>`/`<h1>`.
+- **Ícones animados** (hover) do [lucide-animated.com](https://lucide-animated.com) via Motion.
+
+## Stack
+
+- **React 19** + **TypeScript** + **Vite**
+- **Chakra UI v3** (tema customizado com os design tokens do Cuidda)
+- **next-themes** (color mode), **marked** (Markdown), **motion** (ícones)
 
 ## Como rodar
 
 ```bash
-# instalar dependências
 yarn install
-
-# ambiente de desenvolvimento (http://localhost:5173)
-yarn start        # ou: yarn dev
-
-# build de produção
-yarn build
-
-# pré-visualizar o build
-yarn preview
-
-# checagem de tipos
-yarn typecheck
+yarn dev        # desenvolvimento (http://localhost:5173)
+yarn build      # build de produção (tsc -b && vite build)
+yarn preview    # pré-visualiza o build
+yarn typecheck  # checagem de tipos
 ```
 
-## Estrutura
+## Arquitetura
+
+Camadas independentes, de dentro para fora (clean architecture):
 
 ```
-.
-├── index.html                  # HTML raiz
-├── vite.config.ts              # config do Vite (plugin React + alias @/*)
-├── tsconfig*.json              # configuração do TypeScript
-└── src
-    ├── main.tsx                # ponto de entrada, monta o <Provider> do Chakra
-    ├── App.tsx                 # tela inicial de exemplo
-    ├── vite-env.d.ts
-    └── components/ui
-        ├── provider.tsx        # ChakraProvider + suporte a color mode
-        └── color-mode.tsx      # hooks/botão de tema claro/escuro (next-themes)
+src/
+├── domain/                 # entidades e regras puras (sem framework)
+│   ├── document.ts         #   VitrineDocument, deriveTitle, upsert, limites
+│   ├── view.ts             #   ViewMode (code | split | preview)
+│   ├── time.ts             #   tempo relativo pt-BR
+│   └── sample.ts           #   documento de boas-vindas
+├── services/rendering/     # casos de uso de render (HTML / Markdown)
+├── infrastructure/storage/ # adaptadores de localStorage (repositórios)
+├── hooks/                  # casos de uso com estado (useDocuments, useViewMode…)
+├── theme/                  # sistema Chakra (tokens, semantic tokens, motion)
+├── components/             # apresentação (sidebar, topbar, editor, preview, …)
+│   └── icons/              #   ícones animados Lucide + registry/handle
+└── App.tsx                 # composition root: liga hooks ↔ layout
 ```
+
+Os componentes são “burros” (recebem dados + callbacks); todo o estado e as regras
+ficam nos hooks/domínio. A persistência é isolada atrás de repositórios.
+
+## Persistência (`localStorage`)
+
+| Chave             | Conteúdo                                              |
+| ----------------- | ----------------------------------------------------- |
+| `vitrine:docs`    | documentos recentes (máx. 40)                         |
+| `vitrine:current` | id do documento aberto                                |
+| `vitrine:view`    | modo de visão (`code` \| `split` \| `preview`)        |
+| `vitrine:sidebar` | sidebar aberta (`1`) ou recolhida (`0`)               |
+| `vitrine:theme`   | tema (`light` \| `dark`) — gerido pelo next-themes    |
 
 ## Alias de importação
 
-O alias `@/*` aponta para `src/*` (configurado em `tsconfig.app.json` e
-`vite-tsconfig-paths`). Exemplo: `import { Provider } from "@/components/ui/provider"`.
+`@/*` aponta para `src/*` (configurado em `tsconfig.app.json` + `vite-tsconfig-paths`).
