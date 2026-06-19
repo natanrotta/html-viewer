@@ -1,104 +1,114 @@
-import { useState } from "react"
-import {
-  Badge,
-  Box,
-  Button,
-  Card,
-  Container,
-  Flex,
-  Heading,
-  HStack,
-  SimpleGrid,
-  Stack,
-  Text,
-} from "@chakra-ui/react"
-import { ColorModeButton } from "@/components/ui/color-mode"
+import { useEffect, useRef, useState } from "react"
+import { Box } from "@chakra-ui/react"
 
-const features = [
-  {
-    title: "React 19",
-    description: "Biblioteca para construção de interfaces com componentes.",
-  },
-  {
-    title: "TypeScript",
-    description: "Tipagem estática para um código mais seguro e previsível.",
-  },
-  {
-    title: "Vite",
-    description: "Build tool com dev server rápido e Hot Module Replacement.",
-  },
-  {
-    title: "Chakra UI v3",
-    description: "Componentes acessíveis com suporte a tema claro e escuro.",
-  },
-]
+import { FullscreenOverlay } from "@/components/fullscreen/FullscreenOverlay"
+import { Sidebar } from "@/components/sidebar/Sidebar"
+import { MainArea } from "@/components/workspace/MainArea"
+import { cycleView } from "@/domain/view"
+import { useDocuments } from "@/hooks/useDocuments"
+import { useFullscreen } from "@/hooks/useFullscreen"
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts"
+import { useSidebar } from "@/hooks/useSidebar"
+import { useThemeMode } from "@/hooks/useThemeMode"
+import { useViewMode } from "@/hooks/useViewMode"
+import { ACCENT_APP, ease } from "@/theme/motion"
 
-function App() {
-  const [count, setCount] = useState(0)
+/** Two soft radial washes (accent top-right, brand top-left) over the canvas. */
+const CANVAS_GLOW =
+  `radial-gradient(1200px 600px at 110% -10%, color-mix(in srgb, ${ACCENT_APP} 7%, transparent), transparent 60%), ` +
+  `radial-gradient(1000px 500px at -10% -10%, color-mix(in srgb, #2f80ed 7%, transparent), transparent 55%)`
+
+/**
+ * Composition root: wires the application hooks to the studio layout and binds
+ * the global keyboard shortcuts. Opening a saved document jumps to preview;
+ * starting a new one drops into the code editor.
+ */
+export default function App() {
+  const documents = useDocuments()
+  const { view, setView } = useViewMode()
+  const sidebar = useSidebar()
+  const fullscreen = useFullscreen()
+  const theme = useThemeMode()
+
+  const [justSaved, setJustSaved] = useState(false)
+  const savedTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+
+  const handleSave = () => {
+    documents.saveNow()
+    setJustSaved(true)
+    clearTimeout(savedTimer.current)
+    savedTimer.current = setTimeout(() => setJustSaved(false), 1400)
+  }
+
+  useEffect(() => () => clearTimeout(savedTimer.current), [])
+
+  const openDocument = (id: string) => {
+    documents.selectDocument(id)
+    setView("preview")
+  }
+
+  const createDocument = () => {
+    documents.newDocument()
+    setView("code")
+  }
+
+  useKeyboardShortcuts({
+    toggleSidebar: sidebar.toggle,
+    save: handleSave,
+    newDocument: createDocument,
+    toggleTheme: theme.toggle,
+    prevView: () => setView(cycleView(view, -1)),
+    nextView: () => setView(cycleView(view, 1)),
+    toggleFullscreen: fullscreen.toggle,
+  })
 
   return (
-    <Box minH="100vh" bg="bg.subtle">
-      <Container maxW="4xl" py={{ base: 8, md: 16 }}>
-        <Flex justify="space-between" align="center" mb={10}>
-          <Badge colorPalette="teal" size="lg">
-            html-viewer
-          </Badge>
-          <ColorModeButton />
-        </Flex>
+    <Box
+      display="grid"
+      h="100vh"
+      w="100%"
+      gridTemplateColumns={sidebar.open ? "284px minmax(0, 1fr)" : "0px minmax(0, 1fr)"}
+      gridTemplateRows="100vh"
+      overflow="hidden"
+      fontFamily="sans"
+      color="content.primary"
+      bgColor="surface.canvas"
+      bgImage={CANVAS_GLOW}
+      transition={ease("grid-template-columns, background-color", "slow")}
+    >
+      <Sidebar
+        docs={documents.docs}
+        currentId={documents.currentId}
+        isDark={theme.isDark}
+        justSaved={justSaved}
+        onNewDocument={createDocument}
+        onSelectDocument={openDocument}
+        onDeleteDocument={documents.deleteDocument}
+        onClearAll={documents.clearAll}
+        onToggleTheme={theme.toggle}
+      />
 
-        <Stack gap={4} mb={12}>
-          <Heading size={{ base: "2xl", md: "4xl" }} lineHeight="1.1">
-            React + Chakra UI + TypeScript
-          </Heading>
-          <Text fontSize="lg" color="fg.muted" maxW="2xl">
-            Estrutura inicial pronta para rodar. Edite{" "}
-            <Text as="code" color="teal.500">
-              src/App.tsx
-            </Text>{" "}
-            e a página atualiza automaticamente.
-          </Text>
-        </Stack>
+      <MainArea
+        title={documents.title}
+        onTitleChange={documents.changeTitle}
+        view={view}
+        onViewChange={setView}
+        code={documents.code}
+        mode={documents.mode}
+        rendered={documents.rendered}
+        onCodeChange={documents.changeCode}
+        onModeChange={documents.setMode}
+        onToggleSidebar={sidebar.toggle}
+        onToggleFullscreen={fullscreen.toggle}
+      />
 
-        <Card.Root mb={12}>
-          <Card.Body>
-            <HStack justify="space-between" wrap="wrap" gap={4}>
-              <Stack gap={1}>
-                <Card.Title>Contador interativo</Card.Title>
-                <Card.Description>
-                  Demonstra estado do React funcionando com componentes Chakra.
-                </Card.Description>
-              </Stack>
-              <HStack>
-                <Button
-                  variant="outline"
-                  onClick={() => setCount((c) => c - 1)}
-                >
-                  -
-                </Button>
-                <Text fontSize="2xl" fontWeight="bold" minW="12" textAlign="center">
-                  {count}
-                </Text>
-                <Button colorPalette="teal" onClick={() => setCount((c) => c + 1)}>
-                  +
-                </Button>
-              </HStack>
-            </HStack>
-          </Card.Body>
-        </Card.Root>
-
-        <SimpleGrid columns={{ base: 1, sm: 2 }} gap={4}>
-          {features.map((feature) => (
-            <Card.Root key={feature.title} variant="subtle">
-              <Card.Body>
-                <Card.Title mb={1}>{feature.title}</Card.Title>
-                <Card.Description>{feature.description}</Card.Description>
-              </Card.Body>
-            </Card.Root>
-          ))}
-        </SimpleGrid>
-      </Container>
+      {fullscreen.active && (
+        <FullscreenOverlay
+          title={documents.title}
+          rendered={documents.rendered}
+          onExit={fullscreen.exit}
+        />
+      )}
     </Box>
   )
 }
-
-export default App
