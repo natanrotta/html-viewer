@@ -53,7 +53,7 @@ function SegmentedTab({ active, label, icon: Icon, desktopOnly, onClick }: Segme
       borderRadius="7px"
       cursor="pointer"
       fontFamily="sans"
-      bg={active ? "surface.base" : "transparent"}
+      bg={active ? "surface.panel" : "transparent"}
       color={active ? "content.primary" : "content.muted"}
       boxShadow={active ? "card" : "none"}
       transition={ease("background, color, box-shadow", "base")}

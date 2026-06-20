@@ -13,7 +13,7 @@ export function PreviewHeader() {
       px="16px"
       borderBottom="1px solid"
       borderColor="line.subtle"
-      bg="surface.base"
+      bg="surface.panel"
     >
       <Flex gap="6px">
         {TRAFFIC_LIGHTS.map((color) => (

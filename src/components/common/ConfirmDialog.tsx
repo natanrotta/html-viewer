@@ -67,7 +67,7 @@ export function ConfirmDialog({
                 px="16px"
                 border="1px solid"
                 borderColor="line.default"
-                bg="surface.base"
+                bg="surface.panel"
                 color="content.secondary"
                 borderRadius="sm"
                 fontFamily="sans"

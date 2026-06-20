@@ -104,7 +104,7 @@ export function Sidebar({
         direction="column"
         w={{ base: "100%", md: "284px" }}
         h="100%"
-        bg="surface.base"
+        bg="surface.panel"
         borderRight="1px solid"
         borderColor="line.subtle"
         transition={ease("background, border-color", "slow")}

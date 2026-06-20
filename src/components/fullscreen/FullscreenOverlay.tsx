@@ -64,7 +64,7 @@ export function FullscreenOverlay({ title, rendered, onExit }: FullscreenOverlay
           gap="7px"
           border="1px solid"
           borderColor="line.default"
-          bg="surface.base"
+          bg="surface.panel"
           color="content.secondary"
           borderRadius="10px"
           cursor="pointer"
