@@ -1,0 +1,30 @@
+{
+  "name": "HTML Viewer — Visualizador de HTML e Markdown",
+  "short_name": "HTML Viewer",
+  "description": "Cole HTML ou Markdown e veja o resultado renderizado ao vivo. Visualizador online grátis, com tema claro/escuro, documentos salvos no navegador e modo tela cheia.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f7fc",
+  "theme_color": "#2f80ed",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}

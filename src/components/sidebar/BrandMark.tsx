@@ -9,6 +9,8 @@ export function BrandMark() {
       <BrandTile />
       <Box lineHeight="1.05">
         <Text
+          as="h1"
+          m="0"
           fontWeight="800"
           fontSize="17px"
           letterSpacing="-0.02em"
