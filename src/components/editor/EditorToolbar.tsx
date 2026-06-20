@@ -26,7 +26,7 @@ function ModeTab({ active, label, onClick }: ModeTabProps) {
       px="11px"
       py="4px"
       borderRadius="6px"
-      bg={active ? "surface.base" : "transparent"}
+      bg={active ? "surface.panel" : "transparent"}
       color={active ? "content.brand" : "content.muted"}
       boxShadow={active ? "card" : "none"}
       transition={ease("background, color, box-shadow", "base")}
@@ -56,7 +56,7 @@ export function EditorToolbar({ mode, onModeChange, lineCount, charCount }: Edit
       pr="12px"
       borderBottom="1px solid"
       borderColor="line.subtle"
-      bg="surface.base"
+      bg="surface.panel"
     >
       <Flex
         gap="2px"

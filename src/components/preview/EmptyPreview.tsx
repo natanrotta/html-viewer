@@ -22,7 +22,7 @@ export function EmptyPreview() {
         w="58px"
         h="58px"
         borderRadius="16px"
-        bg="surface.base"
+        bg="surface.panel"
         border="1px solid"
         borderColor="line.subtle"
         boxShadow="card"

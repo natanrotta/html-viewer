@@ -22,7 +22,7 @@ export function EditorPane({ code, mode, onCodeChange, onModeChange }: EditorPan
       minW="0"
       display="flex"
       flexDirection="column"
-      bg="surface.base"
+      bg="surface.panel"
     >
       <EditorToolbar
         mode={mode}

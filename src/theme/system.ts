@@ -123,7 +123,9 @@ const config = defineConfig({
         // ---- Surfaces ----
         surface: {
           canvas: { value: { base: "#f3f7fc", _dark: "#0d0d10" } },
-          base: { value: { base: "#ffffff", _dark: "#16161b" } },
+          // NB: must not be named `base` — that collides with Chakra v3's reserved
+          // `base` condition key and silently emits no CSS variable (transparent).
+          panel: { value: { base: "#ffffff", _dark: "#16161b" } },
           elevated: { value: { base: "#ffffff", _dark: "#1d1d23" } },
           sunken: { value: { base: "#f0f4f8", _dark: "#0a0a0d" } },
           hover: { value: { base: "#f1f5f9", _dark: "rgba(255, 255, 255, 0.07)" } },

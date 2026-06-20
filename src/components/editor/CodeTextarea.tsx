@@ -49,7 +49,7 @@ export function CodeTextarea({ code, mode, onChange }: CodeTextareaProps) {
       outline="none"
       resize="none"
       p="18px 20px"
-      bg="surface.base"
+      bg="surface.panel"
       color="content.primary"
       fontFamily="mono"
       fontSize="13px"

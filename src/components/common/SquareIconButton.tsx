@@ -54,7 +54,7 @@ export function SquareIconButton({
       display="grid"
       placeItems="center"
       boxSize={buttonSize}
-      bg={variant === "sunken" ? "surface.sunken" : "surface.base"}
+      bg={variant === "sunken" ? "surface.sunken" : "surface.panel"}
       color="content.secondary"
       border="1px solid"
       borderColor={variant === "sunken" ? "line.subtle" : "line.default"}
